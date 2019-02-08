@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+
+
+<head>
+
+    <!-- Javascript
+    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+
+
+    <script>
+        $( function() {
+            var tabs = $( "#tabs" ).tabs();
+            tabs.tabs().addClass( "ui-tabs-vertical ui-helper-clearfix" );
+            $( "#tabs li" ).removeClass( "ui-corner-top" ).addClass( "ui-corner-left" );
+            $( "#tabs ul" ).sortable();
+        } );
+    </script>
+
+    <!-- Basic Page Needs
+    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <meta charset="utf-8">
+    <title>Your page title here :)</title>
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Mobile Specific Metas
+    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- FONT
+    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
+
+    <!-- CSS
+    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <link rel="stylesheet" href="stylesheets/normalize.css">
+    <link rel="stylesheet" href="stylesheets/skeleton.css">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <!-- Font Awesome  ––––––––––––––––––––––––––––––– -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP" crossorigin="anonymous">
+
+
+
+    <!-- 12em  vs auto -->
+    <style>
+        .ui-tabs-vertical { width: 55em; }
+        .ui-tabs-vertical .ui-tabs-nav { padding: .2em .1em .2em .2em; float: left; width: auto; }
+        .ui-tabs-vertical .ui-tabs-nav li { clear: left; width: 98%; border-bottom-width: 1px !important; border-right-width: 0 !important; margin: 0 -1px .2em 0; }
+        .ui-tabs-vertical .ui-tabs-nav li a { display:block; }
+        .ui-tabs-vertical .ui-tabs-nav li.ui-tabs-active { padding-bottom: 0; padding-right: .1em; border-right-width: 1px; }
+        .ui-tabs-vertical .ui-tabs-panel { padding: 1em; float: right; width: 30em;}
+
+        html {
+            background: url('images/sky-wallpaper-IBM.jpg') no-repeat center center fixed;
+            -webkit-background-size: cover;
+            -moz-background-size: cover;
+            -o-background-size: cover;
+            background-size: cover;
+        }
+
+
+        a:link {
+            color: #0112a5;
+            background-color: transparent;
+            text-decoration: none;
+        }
+        a:visited {
+            color: #1a772e;
+            background-color: transparent;
+            text-decoration: none;
+        }
+        a:hover {
+            color: #ea2020;
+            background-color: transparent;
+            text-decoration: underline;
+        }
+        a:active {
+            color: #581977;
+            background-color: transparent;
+            text-decoration: underline;
+        }
+    </style>
+
+
+
+    <!-- Favicon
+    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <link rel="icon" type="image/png" href="images/favicon.png">
+
+</head>
+
+<body>
+
+<!-- Primary Page Layout
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+<div class="container">
+    <div class="u-full-width" class="row">
+
+
+        <div class="u-full-width" style="margin-top: 10%">
+            <table class="u-full-width">
+                <tbody>
+                  <tr>
+                      <td> <a href="/designcards" class="fas fa-plus-circle fa-2x"> Create </a> </td>
+                      <td> <a href="/importcards" class="fas fa-file-import fa-2x"> Import </a> </td>
+                      <td> <a href="https://snip.innovate.ibm.com/" class="fas fa-cut fa-2x"  target=”_blank”> Snip URL </a> </td>
+                      <td></td>
+                  </tr>
+                </tbody>
+            </table>
+
+            <!-- Table of records -->
+            <table class="u-full-width">
+                <thead>
+                <tr>
+                    <th>Event Name</th>
+                    <th>Owner</th>
+                    <th>Date</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <!--
+                 This is the icon for export - Add this to each line in the html below.
+                <i class="fas fa-file-export"></i>
+                -->
+                {{#rows}}
+                <tr>
+                    <td><a href="/showcards?id={{_id}}" target="_blank">{{event}}</a></td>
+                    <td>{{owner_name}}</td>
+                    <td>{{timestamp}}</td>
+                    <td><a href="/exportcards?id={{_id}}" class="fas fa-file-export" title="Export">  </a>  <a href="/copycards?id={{_id}}" class="fas far fa-copy fa-1x" title="Clone"> </a>  <a href="/editcards?id={{_id}}" class="fas far fa-pencil-alt fa-1x" title="Edit">  </a> <a href="/delcards?id={{_id}}" class="fas far fa-trash-alt fa-1x" title="Delete"></a></td>
+                </tr>
+                {{/rows}}
+
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

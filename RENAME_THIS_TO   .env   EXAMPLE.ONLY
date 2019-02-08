@@ -1,0 +1,6 @@
+db_full_url="https://useid:password@account-bluemix.cloudant.com"
+db_url="account.cloudant.com"
+db_name="mydb"
+db_userid="userid"
+db_password="password"
+debug="false"

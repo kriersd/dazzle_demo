@@ -1,0 +1,87 @@
+{
+  "_id": "cloud_private_1",
+  "_rev": "16-398178fdee85b96e24bacd5f47758153",
+  "event": "My test Event",
+  "background": "images/background4.jpg",
+  "nav": [
+    {
+      "text": "Cloud Private Knowledge Center",
+      "url": "https://www.ibm.com/support/knowledgecenter/en/SSBS6K/product_welcome_cloud_private.html"
+    },
+    {
+      "text": "DTE Assets",
+      "url": "https://ibm-dte.mybluemix.net/"
+    }
+  ],
+  "people": [
+    {
+      "name": "Dave Krier",
+      "url": "https://www.linkedin.com/in/davekrier/"
+    },
+    {
+      "name": "Vic Newberry",
+      "url": "https://www.linkedin.com/in/newberryv1/"
+    }
+  ],
+  "quicklinks": [
+    {
+      "name": "What is Docker",
+      "url": "https://www.docker.com/what-docker"
+    },
+    {
+      "name": "What is Kubernetes",
+      "url": "https://kubernetes.io/docs/concepts/overview/what-is-kubernetes/"
+    }
+  ],
+  "cards": [
+    {
+      "category": "Demo",
+      "title": "Cloud-public",
+      "icon": "images/icons/live-demo.png",
+      "links": [
+        {
+          "name": "IBM CLoud Public",
+          "url": "http://www.bluemix.net"
+        }
+      ]
+    },
+    {
+      "category": "Slides",
+      "title": "Cloud-private",
+      "icon": "/images/icons/pdf-icon.png",
+      "links": [
+        {
+          "name": "ICP Slides",
+          "url": "https://ibm.box.com/shared/static/u7c9rr4aifq22yl7tbtzxslfir8py0ro.pdf"
+        },
+        {
+          "name": "Intro to Kubernetes",
+          "url": "https://ibm.box.com/shared/static/frovw5kgp06vpy4nibaldv0645lomfj3.pdf"
+        },
+        {
+          "name": "Kubernetes Deployment Example",
+          "url": "https://ibm.box.com/shared/static/514d2lxk6paufj7owuhm5wb4p20cdhuu.pdf"
+        }
+      ]
+    },
+    {
+      "category": "Learning",
+      "title": "Additional Materials",
+      "icon": "images/icons/learning.png",
+      "links": [
+        {
+          "name": "link name 1",
+          "url": "http://#"
+        },
+        {
+          "name": "link name 2",
+          "url": "http://#"
+        },
+        {
+          "name": "link name 3",
+          "url": "http://#"
+        }
+      ]
+    }
+  ]
+}

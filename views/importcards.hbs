@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <!-- Copied this stuff from previuos working version
+        –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="/js/moment.js"></script>
+
+    <script>
+
+        function post(url,jsondoc) {
+
+                // Sending and receiving data in JSON format using POST mothod
+                xhr = new XMLHttpRequest();
+
+                xhr.open("POST", url, true);
+                xhr.setRequestHeader("Content-type", "application/json");
+
+                // This method gets called when the call is complete!
+                xhr.onreadystatechange = function () {
+                    //alert("readyState "+ xhr.readyState + " Status " + xhr.status)
+                    if (xhr.readyState == 4 && xhr.status == 200) {
+                        // This is the page that will load when the JSON is sent to the /insertRecord endpoint
+                        window.location = "/listcards";
+
+                    }
+                };
+
+                jsondoc = JSON.parse(jsondoc);
+
+                //var ts = getformatteddate();
+                var CurrentDate = moment().format("YYYY-MM-DD-HH-MM-SS");
+
+                jsondoc._id = jsondoc.event + "-" + CurrentDate;
+
+                if (jsondoc.hasOwnProperty('_rev')) {
+                    delete jsondoc._rev;
+                }
+
+                if (jsondoc.hasOwnProperty('timestamp')) {
+                    delete jsondoc.timestamp;
+                }
+
+                //alert(JSON.stringify(jsondoc));
+
+                xhr.send(JSON.stringify(jsondoc));
+
+        }
+
+    </script>
+
+
+    <!-- Basic Page Needs
+    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <meta charset="utf-8">
+    <title>Dazzle Demo - Build Cards</title>
+    <meta name="description" content="">
+    <meta name="author" content="Dave Krier">
+
+    <!-- Mobile Specific Metas
+    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- FONT
+    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
+
+    <!-- CSS
+    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <link rel="stylesheet" href="stylesheets/normalize.css">
+    <link rel="stylesheet" href="stylesheets/skeleton.css">
+
+    <!-- Favicon
+    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <link rel="icon" type="image/png" href="images/favicon.png">
+
+</head>
+<body>
+
+<!-- Primary Page Layout
+–––––––––––––––––––––––––––––––––––––––––––––––––– -->
+<div class="container">
+
+    <h4>Dazzle Builder</h4>
+
+    <form>
+        <div class="row" style="margin-top: 5%">
+
+         <textarea class="u-full-width" placeholder="PASTE JSON TEXT HERE" id="jsondoc"></textarea>
+
+         <input class="button-primary" type="button" value="Add" onclick="post('/addcards', document.getElementById('jsondoc').value)">
+         <a class="button button-primary"  href="/listcards"> Cancel </a>
+
+        </div>
+    </form>
+    <div class="row" style="margin-top: 5%">
+        <h4>NOTE</h4>
+        <p> The timestamp will be updated to the current timestamp regardless of what value you have in the document.</p>
+        <p> The _rev element will be deleted if it exists in the document!</p>
+        <p> You can always edit the document once you import it.</p>
+    </div>
+
+</div>
+
+<!-- End Document    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+</body>
+</html>

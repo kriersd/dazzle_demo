@@ -1,0 +1,89 @@
+<!doctype html>
+<html class="no-js">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Flipster Demo</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=550, initial-scale=1">
+
+    <link rel="stylesheet" href="stylesheets/demo.css">
+    <link rel="stylesheet" href="stylesheets/jquery.flipster.css">
+
+    <style>
+        html {
+            background: url('{{background}}') no-repeat center center fixed;
+            -webkit-background-size: cover;
+            -moz-background-size: cover;
+            -o-background-size: cover;
+            background-size: cover;
+        }
+    </style>
+
+    <script src="js/jquery.min.js"></script>
+    <script src="flipstersrc/jquery.flipster.min.js"></script>
+</head>
+<body>
+<header class="main-header">
+    <h1>{{event}}</h1>
+    <a href="https://www.ibm.com/cloud/" target="_blank"><img src="images/icons/ibm_cloud-small.png" align="top"></a>
+
+    <nav class="main-header__nav" role="navigation">
+        <a href="#flipcards">Agenda Topics</a>
+        <a href="/printcards?id={{_id}}">Print Links</a>
+        {{#nav}}
+            <a href="{{url}}">{{text}}</a>
+        {{/nav}}
+
+    </nav>
+    <br>
+
+    <h2>Who's who</h2>
+    <img src="images/icons/linkedin.jpg">
+    {{#people}}
+        <p><a href="{{url}}" target="_blank">{{name}}</a></p>
+    {{/people}}
+    <br>
+    <h2>{{errormsg}}</h2>
+</header>
+
+
+<article id="flipcards" class="demo">
+
+    <div id="carousel">
+        <ul class="flip-items">
+          {{#cards}}
+            <li data-flip-title="{{title}}" data-flip-category="{{category}}">
+                <div class="rcornersbox">
+                    <img src="{{icon}}" style="width:100px;height:100px;">
+                    {{#links}}
+                       <p><a href="{{url}}" target="_blank">{{name}}</a></p>
+                    {{/links}}
+                </div>
+            </li>
+          {{/cards}}
+        </ul>
+    </div>
+
+    <script>
+        var carousel = $("#carousel").flipster({
+            style: 'carousel',
+            spacing: -0.5,
+            nav: true,
+            buttons:   true,
+            start:0
+        });
+    </script>
+
+
+
+</article>
+
+
+
+<a href="https://github.com/kriersd/dazzle_demo"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" alt="Fork Me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png"></a>
+
+
+
+</body>
+</html>

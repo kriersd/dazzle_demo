@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <!-- Copied this stuff from previuos working version
+        –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+
+
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+    <script>
+        function copyToClipBoard() {
+            /* Get the text field */
+            var copyText = document.getElementById("jsondoc");
+
+            /* Select the text field */
+            copyText.select();
+
+            /* Copy the text inside the text field */
+            document.execCommand("copy");
+
+            /* Alert the copied text */
+            alert("Copied the JSON Text to Clipboard");
+        }
+    </script>
+
+    <!-- Basic Page Needs
+    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <meta charset="utf-8">
+    <title>Dazzle Demo - Build Cards</title>
+    <meta name="description" content="">
+    <meta name="author" content="Dave Krier">
+
+    <!-- Mobile Specific Metas
+    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- FONT
+    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
+
+    <!-- CSS
+    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <link rel="stylesheet" href="stylesheets/normalize.css">
+    <link rel="stylesheet" href="stylesheets/skeleton.css">
+
+    <!-- Favicon
+    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <link rel="icon" type="image/png" href="images/favicon.png">
+
+</head>
+<body>
+
+<!-- Primary Page Layout
+–––––––––––––––––––––––––––––––––––––––––––––––––– -->
+<div class="container">
+
+    <h4>Dazzle Builder</h4>
+
+    <form>
+        <div class="row" style="margin-top: 5%">
+
+         <textarea class="u-full-width" id="jsondoc">{{{JSONOBJ}}}</textarea>
+
+         <input class="button-primary" type="button" value="Copy To Clipboard" onclick="copyToClipBoard()">
+
+         <a class="button button-primary"  href="/listcards"> Back to List </a>
+
+        </div>
+    </form>
+    <div class="row" style="margin-top: 5%">
+        <h4>NOTE</h4>
+        <p> You can save this JSON file as a backup. You can then import this into the list at a later time. </p>
+        <p> You can also share this with others who may want to use your show. </p>
+    </div>
+
+</div>
+
+<!-- End Document    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+</body>
+</html>

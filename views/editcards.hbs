@@ -1,0 +1,1013 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <!-- Copied this stuff from previuos working version
+        –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+
+
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+    <script>
+
+        // This is the counter for the card links.. We are only allowing 10 links per card.
+        var counter = 0;
+        var limit = 10;  // Max number of cards allowed.
+
+
+        // ********************************************************************
+        // These are extracted from the JSON document coming from the DB
+        // NOTE:  Using a HBS Handlebars helper class that was registered
+        //        in the app.js file.  Notice the lines just below this comment
+        // ********************************************************************
+
+        var dbcards = {"cards": {{{json cards}}} };     // Using helper to get JSON STRING
+        var dbpeople = {"people":{{{json people}}} };   // Using helper to get JSON STRING
+        var dbnav = {"nav":{{{json nav}}} };         // Using helper to get JSON STRING
+        // var dbbackground = "{{background}}";
+        //var id = "{{_id}}";
+        //var rev = "{{_rev}}";
+
+        // ********************************************************************
+        // The initPage function is called on Window Load and will load all the
+        // values on the page with data from the DB.
+        // ********************************************************************
+
+        window.onload = function() {
+            // Add nav items.
+            for (i = 0; i < dbnav.nav.length; i++) {
+                addNav(dbnav.nav[i].text, dbnav.nav[i].url);
+            }
+
+            // Add People items.
+            for (i = 0; i < dbpeople.people.length; i++) {
+                addName(dbpeople.people[i].name, dbpeople.people[i].url);
+            }
+
+            // Add cards items.
+            for (i = 0; i < dbcards.cards.length; i++) {
+                // Generae a random number
+                var randomNum = Math.floor((Math.random() * 5000) + 1);
+                var newdivid = dbcards.cards[i].category + "-Link-" + randomNum;
+                var newsubid = dbcards.cards[i].category + "-Sub-Link-" + randomNum;
+
+                //alert(newdivid +  " ---  " +  newsubid);
+                loadCards('accordion', dbcards.cards[i].category, dbcards.cards[i].title, dbcards.cards[i].icon, newdivid, newsubid);
+
+                // Add card links text boxes
+                for (ii = 0; ii < dbcards.cards[i].links.length; ii++) {
+                    //alert(newdivid +  "  " +  newsubid);
+                    loadCardLinks(dbcards.cards[i].category, dbcards.cards[i].title, 'accordion', newdivid, newsubid, dbcards.cards[i].links[ii].name, dbcards.cards[i].links[ii].url);
+                    //ADD LINK NAMES & URLs
+                }
+
+            }
+
+        }
+
+
+        function isEmpty(obj) {
+            for(var key in obj) {
+                if(obj.hasOwnProperty(key))
+                    return false;
+            }
+            return true;
+        }
+
+
+        // ***************************************************************************
+        // The Building the JSON array element for the document to be saved to the DB.
+        //   This is for the PEOPLE
+        // ***************************************************************************
+        function build_who_array() {
+            //This is the JSON document that we will dynamiclly build as we walk through the HTML Accordian.
+            JSON_who = {};
+
+            // Each one of the JSON_nav objects will be stuffed into this array
+            ARRAY_who = [];
+
+
+            $("#WhoAccordion").each(function(i) {
+                // We have the according DIV (Loop Through Child Nodes)
+                var a = document.getElementById('WhoAccordion').children;
+                for (alen = 0; alen < a.length; alen++) {
+
+                    var groupDiv = a[alen].children; // This is the Second Div within Accordion (Get the children)
+                    //alert("A Div id: "+ a[alen].id)
+                    //Divs.push(a[alen].id);
+                    for (g = 0; g < groupDiv.length; g++) {
+                        var inputsDiv = groupDiv[g].children;  // This is the second Div (skipping the H3 heading) All the input text boxes are inside this one.
+                        for (i = 0; i < inputsDiv.length; i++) {
+                            // We only care about the text boxes.
+                            if (inputsDiv[i].type === "text") {
+
+                                //alert("DivName: " + inputsDiv[i].name + " Value: " + inputsDiv[i].value);
+
+                                //Create the JSON ARRAY for NAV
+
+                                /*
+                                EXAMPLE ******************************
+                                      "people": [
+                                        {
+                                          "name": "Dave Krier",
+                                          "url": "http://www.linkedin.com"
+                                        },
+                                        {
+                                          "name": "Dave Krier2",
+                                          "url": "http://www.linkedin.com"
+                                        }
+                                      ]
+                                // EXAMPLE ******************************
+                                */
+
+
+                                // Add elements to JSON DOC
+                                if (inputsDiv[i].name === "navlink1_name") {
+                                    JSON_who.name = inputsDiv[i].value;
+                                }
+                                if (inputsDiv[i].name === "navlink1_url") {
+                                    JSON_who.url = inputsDiv[i].value;
+                                }
+                            }
+                        }
+                    }
+
+                    // Testing to see if the element is empty (first element of the HTML we are looping through is always empty.
+                    if(isEmpty(JSON_who)) {
+                        // Object is empty - Do Nothing!!
+                    } else {
+                        // Object is NOT empty
+                        ARRAY_who.push(JSON_who);
+                        JSON_who = {};
+                    }
+
+                }
+
+            });
+
+            //alert(print_r(ARRAY_who));
+            return(ARRAY_who);
+
+        }
+
+        // ***************************************************************************
+        // The Building the JSON array element for the document to be saved to the DB.
+        //   This is for the NAV
+        // ***************************************************************************
+        function build_nav_array() {
+            //This is the JSON document that we will dynamiclly build as we walk through the HTML Accordian.
+            JSON_nav = {};
+
+            // Each one of the JSON_nav objects will be stuffed into this array
+            ARRAY_nav = [];
+
+
+            $("#NavAccordion").each(function(i) {
+                // We have the according DIV (Loop Through Child Nodes)
+                var a = document.getElementById('NavAccordion').children;
+                for (alen = 0; alen < a.length; alen++) {
+
+                    var groupDiv = a[alen].children; // This is the Second Div within Accordion (Get the children)
+                    //alert("A Div id: "+ a[alen].id)
+                    //Divs.push(a[alen].id);
+                    for (g = 0; g < groupDiv.length; g++) {
+                        var inputsDiv = groupDiv[g].children;  // This is the second Div (skipping the H3 heading) All the input text boxes are inside this one.
+                        for (i = 0; i < inputsDiv.length; i++) {
+                            // We only care about the text boxes.
+                            if (inputsDiv[i].type === "text") {
+
+                                //alert("DivName: " + inputsDiv[i].name + " Value: " + inputsDiv[i].value);
+
+                                //Create the JSON ARRAY for NAV
+
+                                /*
+                                EXAMPLE ******************************
+                                      "nav": [
+                                        {
+                                          "text": "My Nav1",
+                                          "url": "http://www.linkedin.com"
+                                        },
+                                        {
+                                          "text": "My Next Link",
+                                          "url": "http://www.kcci.com"
+                                        }
+                                      ]
+                                // EXAMPLE ******************************
+                                */
+
+
+                                // Add elements to JSON DOC
+                                if (inputsDiv[i].name === "navlink1_name") {
+                                    JSON_nav.text = inputsDiv[i].value;
+                                }
+                                if (inputsDiv[i].name === "navlink1_url") {
+                                    JSON_nav.url = inputsDiv[i].value;
+                                }
+
+                            }
+
+                        }
+
+                    }
+
+
+                    if(isEmpty(JSON_nav)) {
+                        // Object is empty - Do Nothing!!
+                    } else {
+                        // Object is NOT empty
+                        ARRAY_nav.push(JSON_nav);
+                        JSON_nav = {};
+                    }
+
+                }
+
+            });
+            //alert(print_r(ARRAY_nav));
+            return(ARRAY_nav);
+        }
+
+        // ***************************************************************************
+        // The Building the JSON array element for the document to be saved to the DB.
+        //   This is for the CARDS
+        // ***************************************************************************
+        function build_card_arrray() {
+            //This is the JSON document that we will dynamiclly build as we walk through the HTML Accordian.
+            JSON_cards = {};
+
+            // This is the JSON document for the links. There will be an arrray of JSON docs in the cards doc
+            JSON_links = {};
+
+            // Each one of the JSON_cards objects will be stuffed into this array
+            ARRAY_cards = [];
+
+            // Array for the JSON documents containing the links and link names.
+            ARRAY_links = [];
+
+
+            $("#accordion").each(function(i) {
+                // We have the according DIV (Loop Through Child Nodes)
+                var a = document.getElementById('accordion').children;
+                for (alen = 0; alen < a.length; alen++) {
+
+                    var groupDiv = a[alen].children; // This is the Second Div within Accordion (Get the children)
+                    //alert("A Div id: "+ a[alen].id)
+                    //Divs.push(a[alen].id);
+                    for (g = 0; g < groupDiv.length; g++) {
+                        var inputsDiv = groupDiv[g].children;  // This is the second Div (skipping the H3 heading) All the input text boxes are inside this one.
+                        for (i = 0; i < inputsDiv.length; i++) {
+                            // We only care about the text boxes.
+                            if (inputsDiv[i].type === "text") {
+
+                                //alert("DivName: " + inputsDiv[i].name + " Value: " + inputsDiv[i].value);
+
+                                //Create the JSON ARRAY for CARDS
+
+                                /*
+                                EXAMPLE ******************************
+                                "cards": [
+                                   { "category": "Cat1",
+                                    "title": "Title1",
+                                      "icon": "images/icons/pdf-icon.png",
+                                      "links": [
+                                        {
+                                          "name": "Link1",
+                                          "url": "http://www.cnn.com"
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "category": "Cat2",
+                                      "title": "Title2",
+                                      "icon": "images/icons/learning.png",
+                                      "links": [
+                                        {
+                                          "name": "link2",
+                                          "url": "http://www.cnn.com"
+                                        }
+                                       ]
+                                ]
+                                // EXAMPLE ******************************
+                                */
+
+                                // Add elements to JSON DOC
+                                if (inputsDiv[i].name === "DCardCat[]") {
+                                    JSON_cards.category = inputsDiv[i].value;
+                                }
+                                if (inputsDiv[i].name === "DCardTitle[]") {
+                                    JSON_cards.title = inputsDiv[i].value;
+                                }
+                                if (inputsDiv[i].name === "DImageIcon[]") {
+                                    JSON_cards.icon = inputsDiv[i].value;
+                                }
+
+                                // Add Linksnames & linkURL -- There could be many of these per carrd.
+                                if (inputsDiv[i].name.includes("linkname")){
+                                    JSON_links.name = inputsDiv[i].value;
+                                }
+                                if (inputsDiv[i].name.includes("linkurl")){
+                                    JSON_links.url = inputsDiv[i].value;
+
+                                    // Add it to the Array
+                                    ARRAY_links.push(JSON_links)
+                                    JSON_links = {};
+                                }
+
+                            }
+
+                        }
+
+                    }
+
+                    if(isEmpty(JSON_cards)) {
+                        // Object is empty - Do Nothing!!
+                    } else {
+                        // Object is NOT empty
+                        // Add elements to ARRAY_cards
+                        JSON_cards.links = ARRAY_links;
+                        ARRAY_cards.push(JSON_cards);
+                        JSON_cards = {};
+                        ARRAY_links = [];
+                    }
+
+                }
+
+            });
+            //alert(print_r(ARRAY_cards));
+            return(ARRAY_cards);
+        }
+
+        // ***************  THIS IS HELPFUL for testing *********************
+        // *  This will print out the contents of an array
+        //alert(print_r(your array));  //call it like this
+        // ******************************************************************
+
+        function print_r(arr,level) {
+            var dumped_text = "";
+            if(!level) level = 0;
+
+             //The padding given at the beginning of the line.
+            var level_padding = "";
+            for(var j=0;j<level+1;j++) level_padding += "    ";
+
+            if(typeof(arr) == 'object') { //Array/Hashes/Objects
+                for(var item in arr) {
+                    var value = arr[item];
+
+                    if(typeof(value) == 'object') { //If it is an array,
+                        dumped_text += level_padding + "'" + item + "' ...\n";
+                        dumped_text += print_r(value,level+1);
+                    } else {
+                        dumped_text += level_padding + "'" + item + "' => \"" + value + "\"\n";
+                    }
+                }
+            } else { //Stings/Chars/Numbers etc.
+                dumped_text = "===>"+arr+"<===("+typeof(arr)+")";
+            }
+            return dumped_text;
+        }
+        // ******************************************************************
+
+        // ******************************************************************
+        // This Initializes the Card accordion list
+        // ******************************************************************
+        $( function() {
+            $( "#accordion" )
+                    .accordion({
+                        header: "> div > h3",
+                        heightStyle: "content"
+                    })
+                    .sortable({
+                        axis: "y",
+                        handle: "h3",
+                        stop: function( event, ui ) {
+                            // IE doesn't register the blur when sorting
+                            // so trigger focusout handlers to remove .ui-state-focus
+                            ui.item.children( "h3" ).triggerHandler( "focusout" );
+
+                            // Refresh accordion to handle new order
+                            $( this ).accordion( "refresh" );
+                        }
+                    });
+        } );
+
+        // ******************************************************************
+        // This Initializes the Nav accordion list
+        // ******************************************************************
+        $( function() {
+            $( "#NavAccordion" )
+                    .accordion({
+                        header: "> div > h3",
+                        heightStyle: "content"
+                    })
+                    .sortable({
+                        axis: "y",
+                        handle: "h3",
+                        stop: function( event, ui ) {
+                            // IE doesn't register the blur when sorting
+                            // so trigger focusout handlers to remove .ui-state-focus
+                            ui.item.children( "h3" ).triggerHandler( "focusout" );
+
+                            // Refresh accordion to handle new order
+                            $( this ).accordion( "refresh" );
+                        }
+                    });
+        } );
+
+        // ******************************************************************
+        // This Initializes the Whow's who accordion list
+        // ******************************************************************
+        $( function() {
+            $( "#WhoAccordion" )
+                    .accordion({
+                        header: "> div > h3",
+                        heightStyle: "content"
+                    })
+                    .sortable({
+                        axis: "y",
+                        handle: "h3",
+                        stop: function( event, ui ) {
+                            // IE doesn't register the blur when sorting
+                            // so trigger focusout handlers to remove .ui-state-focus
+                            ui.item.children( "h3" ).triggerHandler( "focusout" );
+
+                            // Refresh accordion to handle new order
+                            $( this ).accordion( "refresh" );
+                        }
+                    });
+        } );
+
+        //********************************************************************************************************
+        // This Initializes the accordion feature and sets the defaults. There is one of these for each accordian.
+        //********************************************************************************************************
+        $( function() {
+            $( "#WhoAccordion" ).accordion({
+                active: false,
+                collapsible: true
+            });
+        } );
+
+        $( function() {
+            $( "#NavAccordion" ).accordion({
+                active: false,
+                collapsible: true
+            });
+        } );
+
+        $( function() {
+            $( "#accordion" ).accordion({
+                active: false,
+                collapsible: true
+            });
+        } );
+
+        //********************************************************************************************************
+        // validate all required fields.
+        //********************************************************************************************************
+        function validateFields(){
+            if (document.getElementById('owner_name').value.length < 1){
+                alert("Your Name is a required field");
+                return false;
+            } else if (document.getElementById('event').value.length < 1) {
+                alert("Event Name is a required field");
+                return false;
+            } else if (document.getElementById('owner_email').value.length < 1) {
+                alert("Your Email is a required field");
+                return false;
+            } else if (document.getElementById('description').value.length < 1) {
+                alert("Description is a required field");
+               return false;
+            } else {
+                // We have all required fields.
+                return true;
+            }
+        }
+
+        //********************************************************************************************************
+        // POST Function
+        //********************************************************************************************************
+        function post(url) {
+
+            // First validate all required fields have a value;
+            if (!validateFields()) {
+                alert("Fill out all the fields then try again");
+            } else {
+                // Let's process this request.
+
+                // Sending and receiving data in JSON format using POST mothod
+                xhr = new XMLHttpRequest();
+
+                xhr.open("POST", url, true);
+                xhr.setRequestHeader("Content-type", "application/json");
+
+                // This method gets called when the call is complete!
+                xhr.onreadystatechange = function () {
+                    //alert("readyState "+ xhr.readyState + " Status " + xhr.status)
+                    if (xhr.readyState == 4 && xhr.status == 200) {
+                        // This is the page that will load when the JSON is sent to the /insertRecord endpoint
+                        window.location = "/listcards";
+
+                    }
+                };
+
+                /*
+                //********************************************************************************************************
+                // Date format function.
+                //********************************************************************************************************
+                function getformatteddate() {
+                    var x = new Date();
+                    var y = x.getFullYear().toString();
+                    var m = (x.getMonth() + 1).toString();
+                    var d = x.getDate().toString();
+                    var h = x.getHours().toString();
+                    var min = x.getMinutes().toString();
+                    (d.length == 1) && (d = '0' + d);
+                    (m.length == 1) && (m = '0' + m);
+                    var yyyymmddmin = y + m + d + "-" + h + "-" + min;
+                    return yyyymmddmin;
+                }
+
+                var ts = getformatteddate();
+
+                */
+
+                // Build the DOC to insert into the DB.
+
+                var jsondoc = {};
+
+                //jsondoc._id = document.getElementById('event').value + "-" + ts;
+                //jsondoc.timestamp = ts;
+                jsondoc.event = document.getElementById('event').value;
+                jsondoc.background = document.getElementById('background').value;
+                jsondoc.owner_name = document.getElementById('owner_name').value;
+                jsondoc.owner_email = document.getElementById('owner_email').value;
+                jsondoc.description = document.getElementById('description').value;
+
+                jsondoc.cards = build_card_arrray();
+
+                jsondoc.nav = build_nav_array();
+
+                jsondoc.people = build_who_array();
+
+                jsondoc._id = "{{_id}}";
+                jsondoc._rev = "{{_rev}}";
+
+                xhr.send(JSON.stringify(jsondoc));
+
+            }   // Function End.
+        }
+
+        //********************************************************************************************************
+        // Add Nav Link
+        //********************************************************************************************************
+        function addNav(linkname, linkurl) {
+
+            // Generae a random number
+            var randomNum = Math.floor((Math.random() * 5000) + 1);
+
+            var linkdivid = "Link-" + randomNum;    // This is actually used in the dynamic javascript.. Don't delete.
+
+            $('.NavAccordion').append("<div id=\"Link-" + randomNum + "\"class=\"group\"> <h3>Nav Link - " + linkname + "</h3> <div><label for=\"navlink1_name\">Nav Link</label><input class=\"u-full-width\" style=\"background-color:#dab6ed\" placeholder=\"Link Name\" type=\"text\" name=\"navlink1_name\" id=\"navlink1_name\" value=\""+ linkname +"\"><input class=\"u-full-width\" style=\"background-color:#dab6ed\" placeholder=\"http://\" type=\"text\" name=\"navlink1_url\" id=\"navlink1_url\" value=\""+linkurl+"\"><a class='button' onclick=\"removeInput('NavAccordion','" + linkdivid  + "')\">Delete</a></div></div>");
+
+            $('.NavAccordion').accordion( "refresh" );
+
+            // clear out input fields
+            document.getElementById('NavLinkName').value = "";
+            document.getElementById('NavLinkURL').value = "";
+
+        }
+
+        //********************************************************************************************************
+        // Add Poeple Link - LinkedIn URL
+        //********************************************************************************************************
+        function addName(linkname, linkurl) {
+
+            // Generae a random number
+            var randomNum = Math.floor((Math.random() * 5000) + 1);
+
+            var linkdivid = "Link-" + randomNum;
+
+            $('.WhoAccordion').append("<div id=\"Link-" + randomNum + "\"class=\"group\"> <h3>Linked Link - " + linkname + "</h3> <div><label for=\"navlink1_name\">Linkedin Link</label><input class=\"u-full-width\" style=\"background-color:#dab6ed\" placeholder=\"Link Name\" type=\"text\" name=\"navlink1_name\" id=\"navlink1_name\" value=\""+ linkname +"\"><input class=\"u-full-width\" style=\"background-color:#dab6ed\" placeholder=\"http://\" type=\"text\" name=\"navlink1_url\" id=\"navlink1_url\" value=\""+linkurl+"\"><a class='button' onclick=\"removeInput('WhoAccordion','" + linkdivid + "')\">Delete</a> </div></div>");
+
+            $('.WhoAccordion').accordion( "refresh" );
+
+
+            // clear out input fields
+            document.getElementById('peopleName').value = "";
+            document.getElementById('peopleURL').value = "";
+
+        }
+        //********************************************************************************************************
+        // This is called when we want to add a NEW card on the page.
+        //********************************************************************************************************
+        function addCard(divName, category, title, icon){
+            if(category.length > 1 && title.length > 1 && icon.length > 1) {
+                if (counter == limit)  {
+                    alert("You have reached the limit of adding " + counter + " cards");
+                }
+                else {
+
+                    counter++;
+                    var newdiv = document.createElement('div');
+
+                    // Generae a random number
+                    var randomNum = Math.floor((Math.random() * 5000) + 1);
+
+                    newdiv.id = category + "-Link-" + randomNum;
+                    var newdivid = category + "-Link-" + randomNum;
+                    var newsubid = category + "-Sub-Link-" + randomNum;
+                    newdiv.class = "group";
+
+                    $('.accordion').append("<div id=\"" + category + "-Link-" + randomNum + "\"class=\"group\"><h3>Card Category: "+ category +"</h3><div id=\"" + category + "-Sub-Link-" + randomNum + "\"><input type='text' value='"+ category +"' name='DCardCat[]' style='background-color:#9effbe' ><a class='button' onclick=\"removeInput('"+ divName + "','" + newdiv.id + "')\">Delete Card</a> <a class='button' onclick=\"addCardLink('"+ category + "','" + title + "','" + divName + "','" + newdiv.id + "','" + newsubid + "')\">Add Link</a> <br><input class='u-full-width' type='text' value='"+ title +"' name='DCardTitle[]' style='background-color:#fbff9e'><br><input class='u-full-width' type='text' style='background-color:#dbe8ff' name='DImageIcon[]' style='background-color:#dbe8ff' value='" + icon + "'> </div></div>");
+
+                    $('.accordion').accordion( "refresh" );
+
+                }
+            } else {
+                alert("Please fill Out all the fields. Link must contain: http://");
+            }
+        }
+
+        //********************************************************************************************************
+        //This one is ONLY used in the initial load of the page - Loads the values from the DB to the page.
+        //********************************************************************************************************
+        function loadCards(divName, category, title, icon, dividin, newsubidin){
+            //alert(" ** "+ newsubidin);
+            if(category.length > 1 && title.length > 1 && icon.length > 1) {
+                if (counter == limit)  {
+                    alert("You have reached the limit of adding " + counter + " cards");
+                }
+                else {
+
+                    counter++;
+                    //var newdiv = document.createElement('div');
+
+                    // Generae a random number
+                    //var randomNum = Math.floor((Math.random() * 5000) + 1);
+
+                    //newdiv.id = category + "-Link-" + randomNum;
+                    //var newdivid = category + "-Link-" + randomNum;
+                    //var newsubid = category + "-Sub-Link-" + randomNum;
+
+                    //newdiv.class = "group";
+
+                    $('.accordion').append("<div id='"+ dividin +"' class=\"group\"><h3>Card Category: "+ category +"</h3><div id='"+ newsubidin +"'><input type='text' value='"+ category +"' name='DCardCat[]' style='background-color:#9effbe' ><a class='button' onclick=\"removeInput('"+ divName + "','" + dividin + "')\">Delete Card</a> <a class='button' onclick=\"addCardLink('"+ category + "','" + title + "','" + divName + "','" + dividin + "','" + newsubidin + "')\">Add Link</a> <br><input class='u-full-width' type='text' value='"+ title +"' name='DCardTitle[]' style='background-color:#fbff9e'><br><input class='u-full-width' type='text' style='background-color:#dbe8ff' name='DImageIcon[]' style='background-color:#dbe8ff' value='" + icon + "'> </div></div>");
+
+                    $('.accordion').accordion( "refresh" );
+
+                }
+            } else {
+                alert("Please fill Out all the fields. Link must contain: http://");
+            }
+        }
+
+        //********************************************************************************************************
+        // This is ONLY called on inital load of the page - Adds the link text boxes to the cards on init
+        //********************************************************************************************************
+        function loadCardLinks(category, title, divName, addToDiv, subdivid, linkname, linkurl) {
+            //alert(divName + " " + addToDiv + " " +  subdivid);
+
+            // Generae a random number
+            var randomNum2 = Math.floor((Math.random() * 5000) + 1);
+
+            // Add Link Name
+            var node_name = document.createElement("input");
+
+            var attrtype = document.createAttribute("type");
+            attrtype.value = "text";
+
+            var attrname = document.createAttribute("name");
+            attrname.value = "linkname" + randomNum2;
+
+            var attrid = document.createAttribute("id");
+            attrid.value = "linkname" + randomNum2;
+
+            var attrplholder1 = document.createAttribute("value");
+            attrplholder1.value = linkname;
+
+            node_name.setAttributeNode(attrid);
+            node_name.setAttributeNode(attrplholder1);
+            node_name.setAttributeNode(attrtype);
+            node_name.setAttributeNode(attrname);
+
+
+            //Add Link URL
+            var node_url = document.createElement("input");
+
+            var attrtype = document.createAttribute("type");
+            attrtype.value = "text";
+
+            var attrname = document.createAttribute("name");
+            attrname.value = "linkurl" + randomNum2;
+
+            var attrid = document.createAttribute("id");
+            attrid.value = "linkurl" + randomNum2;
+
+            var attrplholder2 = document.createAttribute("value");
+            attrplholder2.value = linkurl;
+
+            var attevent = document.createAttribute("onchange");
+            attevent.value = "validateCardLinkName("+ "'"+ category + "','" + title + "', linkname" + randomNum2 + "," + "linkurl" + randomNum2 + ",this.value" +")";   // Sending the value to save to array
+
+            // Line break element
+            var br = document.createElement("br");
+
+
+            node_url.setAttributeNode(attrid);
+            node_url.setAttributeNode(attrplholder2);
+            node_url.setAttributeNode(attrtype);
+            node_url.setAttributeNode(attrname);
+            node_url.setAttributeNode(attevent);
+
+
+            // Adding Del Button
+            var delbutton = document.createElement("a");
+            delbutton.innerHTML = "Remove";
+            var delattrtyp = document.createAttribute("class");
+            delattrtyp.value = "button";
+            var delid = document.createAttribute("id");
+            delid.value = "delbutton" + randomNum2;
+            var delattevent = document.createAttribute("onclick");
+            delattevent.value = "removeCardLink('"+ subdivid + "','" + node_name.id + "','" + node_url.id + "','"  + "delbutton" + randomNum2 +  "')";
+
+            delbutton.setAttributeNode(delattrtyp);
+            delbutton.setAttributeNode(delid);
+            delbutton.setAttributeNode(delattevent);
+
+            //alert(subdivid + "  " + node_name);
+            document.getElementById(subdivid).appendChild(node_name);
+            document.getElementById(subdivid).appendChild(node_url);
+            document.getElementById(subdivid).appendChild(delbutton);
+            document.getElementById(subdivid).appendChild(br);
+
+            $('.accordion').accordion( "refresh" );
+
+        }
+
+        //********************************************************************************************************
+        // This adds the link text boxes to the current card.
+        //    This is the function called when you click the Add Link button on the cards.
+        //********************************************************************************************************
+        function addCardLink(category, title, divName, addToDiv, subdivid) {
+            //alert(divName + " " + addToDiv + " " +  subdivid);
+
+            // Generae a random number
+            var randomNum2 = Math.floor((Math.random() * 5000) + 1);
+
+            // Add Link Name
+            var node_name = document.createElement("input");
+
+            var attrtype = document.createAttribute("type");
+            attrtype.value = "text";
+
+            var attrname = document.createAttribute("name");
+            attrname.value = "linkname" + randomNum2;
+
+            var attrid = document.createAttribute("id");
+            attrid.value = "linkname" + randomNum2;
+
+            var attrplholder1 = document.createAttribute("placeholder");
+            attrplholder1.value = "Link Name";
+
+            node_name.setAttributeNode(attrid);
+            node_name.setAttributeNode(attrplholder1);
+            node_name.setAttributeNode(attrtype);
+            node_name.setAttributeNode(attrname);
+
+            //Add Link URL
+            var node_url = document.createElement("input");
+
+            var attrtype = document.createAttribute("type");
+            attrtype.value = "text";
+
+            var attrname = document.createAttribute("name");
+            attrname.value = "linkurl" + randomNum2;
+
+            var attrid = document.createAttribute("id");
+            attrid.value = "linkurl" + randomNum2;
+
+            var attrplholder2 = document.createAttribute("placeholder");
+            attrplholder2.value = "http://";
+
+            var attevent = document.createAttribute("onchange");
+            attevent.value = "validateCardLinkName("+ "'"+ category + "','" + title + "', linkname" + randomNum2 + "," + "linkurl" + randomNum2 + ",this.value" +")";   // Sending the value to save to array
+
+            // Line break element
+            var br = document.createElement("br");
+
+            node_url.setAttributeNode(attrid);
+            node_url.setAttributeNode(attrplholder2);
+            node_url.setAttributeNode(attrtype);
+            node_url.setAttributeNode(attrname);
+            node_url.setAttributeNode(attevent);
+
+            // Adding Del Button
+            var delbutton = document.createElement("a");
+            delbutton.innerHTML = "Remove";
+            var delattrtyp = document.createAttribute("class");
+            delattrtyp.value = "button";
+            var delid = document.createAttribute("id");
+            delid.value = "delbutton" + randomNum2;
+            var delattevent = document.createAttribute("onclick");
+            delattevent.value = "removeCardLink('"+ subdivid + "','" + node_name.id + "','" + node_url.id + "','"  + "delbutton" + randomNum2 +  "')";
+
+            delbutton.setAttributeNode(delattrtyp);
+            delbutton.setAttributeNode(delid);
+            delbutton.setAttributeNode(delattevent);
+
+            //alert(subdivid + "  " + node_name);
+            document.getElementById(subdivid).appendChild(node_name);
+            document.getElementById(subdivid).appendChild(node_url);
+            document.getElementById(subdivid).appendChild(delbutton);
+            document.getElementById(subdivid).appendChild(br);
+
+
+            $('.accordion').accordion( "refresh" );
+
+        }
+
+        //********************************************************************************************************
+        //  This saves the card link
+        //   This makes sure you have a URL Name with the URL value.
+        //********************************************************************************************************
+
+        function validateCardLinkName(CATEGORY,TITLE, URL_NAME_ID, URL_ID, URL_VALUE) {
+
+            if (URL_NAME_ID.value.length < 1) {
+                alert("You must first give your URL a NAME");
+                URL_ID.value = "";
+
+            }
+
+        }
+
+        //********************************************************************************************************
+        //   This removes a Div or Input
+        //     Called to remove links for PEOPLE, NAV, and CARDS
+        //********************************************************************************************************
+        function removeInput(divName,removeDiv){
+            //alert(divName + " " + removeDiv);
+
+            var d = document.getElementById(divName);
+
+            var olddiv = document.getElementById(removeDiv);
+
+            d.removeChild(olddiv);
+
+        }
+
+        //********************************************************************************************************
+        //   This removes a Div or Input
+        //     Called to remove links on the individual cards.
+        //********************************************************************************************************
+        function removeCardLink(divName,removeID1, removeID2, removeID3){
+            alert(removeID1 + " " + removeID2 + " " + removeID3);
+
+            var d = document.getElementById(divName);
+
+            var id1 = document.getElementById(removeID1);
+            var id2 = document.getElementById(removeID2);
+            var id3 = document.getElementById(removeID3);
+
+            d.removeChild(id1);
+            d.removeChild(id2);
+            d.removeChild(id3);
+
+        }
+
+
+    </script>
+
+
+    <!-- Basic Page Needs
+    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <meta charset="utf-8">
+    <title>Dazzle Demo - Build Cards</title>
+    <meta name="description" content="">
+    <meta name="author" content="Dave Krier">
+
+    <!-- Mobile Specific Metas
+    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- FONT
+    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
+
+    <!-- CSS
+    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <link rel="stylesheet" href="stylesheets/normalize.css">
+    <link rel="stylesheet" href="stylesheets/skeleton.css">
+
+    <!-- Favicon
+    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <link rel="icon" type="image/png" href="images/favicon.png">
+
+</head>
+<body>
+
+<!-- Primary Page Layout –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+
+<div class="container">
+
+            <h4>Dazzle Builder</h4>
+
+
+            <!-- The above form looks like this -->
+            <form>
+                <div class="row">
+                    <div class="one-half column" style="margin-top: 5%">
+                        <label for="owner_name">Your Name</label>
+                        <input class="u-full-width" type="text" placeholder="Full Name" id="owner_name" name="owner_name" value="{{owner_name}}">
+
+                        <label for="exampleEmailInput">Your email</label>
+                        <input class="u-full-width" type="email" placeholder="test@mailbox.com" id="owner_email" name="owner_email" value="{{owner_email}}">
+
+                    </div>
+                    <div class="one-half column" style="margin-top: 5%">
+
+                        <label for="event">Event Name</label>
+                        <input class="u-full-width" type="text" placeholder="Event Name" id="event" name="event" value="{{event}}">
+
+                        <label for="background">Background Image</label>
+                        <select class="u-full-width" id="background" name="background">
+                            <option selected value="{{background}}"> </option>
+                            <option value="images/background4.jpg">Clouds</option>
+                            <option value="images/background2.jpg">Technology</option>
+                        </select>
+
+                    </div>
+                    <label for="description">Description</label>
+                    <textarea class="u-full-width" placeholder="Description" id="description">{{description}}</textarea>
+                </div>
+
+
+                <h4>Add Cards</h4>
+
+                <label for="category">Category</label>
+                <input class="u-full-width" style='background-color:#9effbe' type="text" name="category" id="category">
+
+                <label for="title">Title</label>
+                <input class="u-full-width" style='background-color:#FBFF9E' type="text" name="title" id="title">
+
+                <label for="icon">Icon Image</label>
+                <select class="u-full-width" id="icon" name="icon">
+                    <option value="images/icons/pdf-icon.png">PDF</option>
+                    <option value="images/icons/learning.png">Learning</option>
+                    <option value="images/icons/live-demo.png">Live Demo</option>
+                    <option value="images/icons/lab-icon.png">Lab</option>
+                    <option value="images/icons/video-icon.png">Video</option>
+                </select>
+
+                <input class="button-primary" type="button" value="Add" onClick="addCard('accordion', document.getElementById('category').value, document.getElementById('title').value, document.getElementById('icon').value)">
+
+           </form>
+
+           <!-- Cards Accordion -->
+    <h4>Your Cards </h4>
+
+    <div class="accordion" id="accordion">
+
+    <input class="button-primary" type="button" value="Update Agenda" onclick="post('/addcards')">
+
+    </div>
+
+
+    <br>
+    <h3>Left Side Nav Links </h3>
+
+        <div class="row">
+            <div class="u-full-width">
+                <input class="button-primary" type="button" value="Add Nav Link" onClick="addNav(document.getElementById('NavLinkName').value,document.getElementById('NavLinkURL').value)">
+                <!--  <input class="button-primary" type="button" value="WALK" onClick="build_nav_array()"> -->
+                <input type="text" placeholder="Link Name" name="NavLinkName" id="NavLinkName">
+                <input type="text" placeholder="http://Link URL" name="NavLinkURL" id="NavLinkURL" size="70">
+            </div>
+        </div>
+
+    <div class='NavAccordion' id="NavAccordion">
+    </div>
+
+
+<br>
+<h3>Presenters: Who's who Links</h3>
+
+<div class="row">
+    <div class="u-full-width">
+        <input class="button-primary" type="button" value="Add Name" onClick="addName(document.getElementById('peopleName').value,document.getElementById('peopleURL').value)">
+       <!-- <input class="button-primary" type="button" value="WALK" onClick="build_who_array()"> -->
+        <input type="text" placeholder="Link Name" name="peopleName" id="peopleName">
+        <input type="text" placeholder="http://LinkedIN URL" name="peopleURL" id="peopleURL" size="70">
+    </div>
+</div>
+
+
+<div class='WhoAccordion' id="WhoAccordion">
+</div>
+
+</div>
+
+<!-- End Document    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+</body>
+</html>

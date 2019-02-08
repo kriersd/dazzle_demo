@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <!-- Copied this stuff from previuos working version
+        –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+
+
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="https://unpkg.com/jspdf@latest/dist/jspdf.min.js"></script>
+
+    <script>
+        var doc = new jsPDF();
+        var specialElementHandlers = {
+            '#editor': function (element, renderer) {
+                return true;
+            }
+        };
+
+        function printme() {
+            /* Get the text field */
+            doc.fromHTML(document.body,15,1,{
+                'width': 170,
+                'elementHandlers': specialElementHandlers
+            });
+
+            doc.save('page-links.pdf');
+        }
+
+
+    </script>
+
+    <!-- Basic Page Needs
+    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <meta charset="utf-8">
+    <title>Printed Links</title>
+    <meta name="description" content="">
+    <meta name="author" content="Dave Krier">
+
+    <!-- Mobile Specific Metas
+    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- FONT
+    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
+
+    <!-- CSS
+    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <link rel="stylesheet" href="stylesheets/normalize.css">
+    <link rel="stylesheet" href="stylesheets/skeleton.css">
+
+    <!-- Favicon
+    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <link rel="icon" type="image/png" href="images/favicon.png">
+
+</head>
+<body>
+
+<!-- Primary Page Layout
+–––––––––––––––––––––––––––––––––––––––––––––––––– -->
+<div class="container">
+
+    <h2>{{event}}</h2>
+
+       <div class="row" tyle="margin-top: 5%">
+           <div class="one-half column">
+               <label for="owner_name">contact</label>
+               <p id="owner_name">{{owner_name}} </p>
+           </div>
+           <div class="one-half column">
+               <label for="owner_email">Email</label>
+               <p id="owner_email">{{owner_email}} </p>
+           </div>
+       </div>
+       <div class="u-full-width">
+           <label for="desc">Description</label>
+           <p id="description">{{description}} </p>
+      </div>
+       <div class="u-full-width" style="margin-top: 10%">
+        {{#cards}}
+            <h3>{{category}} - {{title}}</h3>
+            <table class="u-full-width">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Link</th>
+                </tr>
+                </thead>
+                <tbody>
+                {{#links}}
+                <tr>
+                    <td>{{name}}</td>
+                    <td><a href="{{url}}">{{url}}</a></td>
+                </tr>
+                {{/links}}
+                </tbody>
+            </table>
+        {{/cards}}
+
+           <h3>Side Bar Links</h3>
+           <table class="u-full-width">
+               <thead>
+               <tr>
+                   <th>Name</th>
+                   <th>Link</th>
+               </tr>
+               </thead>
+               <tbody>
+               {{#nav}}
+                   <tr>
+                       <td>{{text}}</td>
+                       <td><a href="{{url}}">{{url}}</a></td>
+                   </tr>
+               {{/nav}}
+               </tbody>
+           </table>
+
+           <h3>Linked In</h3>
+           <table class="u-full-width">
+               <thead>
+               <tr>
+                   <th>Name</th>
+                   <th>Link</th>
+               </tr>
+               </thead>
+               <tbody>
+               {{#people}}
+                   <tr>
+                       <td>{{name}}</td>
+                       <td><a href="{{url}}">{{url}}</a></td>
+                   </tr>
+               {{/people}}
+               </tbody>
+           </table>
+
+    </div>
+
+         <input class="button-primary" type="button" value="print" onclick="printme()">
+
+         <a class="button button-primary"  href="/listcards"> Back to List </a>
+
+</div>
+
+
+<!-- End Document    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+</body>
+</html>

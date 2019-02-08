@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+
+
+<head>
+
+    <!-- Javascript
+    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script>
+        $( function() {
+            var tabs = $( "#tabs" ).tabs();
+            tabs.tabs().addClass( "ui-tabs-vertical ui-helper-clearfix" );
+            $( "#tabs li" ).removeClass( "ui-corner-top" ).addClass( "ui-corner-left" );
+            $( "#tabs ul" ).sortable();
+        } );
+    </script>
+
+    <!-- Basic Page Needs
+    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <meta charset="utf-8">
+    <title>Your page title here :)</title>
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Mobile Specific Metas
+    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- FONT
+    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
+
+    <!-- CSS
+    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <link rel="stylesheet" href="stylesheets/normalize.css">
+    <link rel="stylesheet" href="stylesheets/skeleton.css">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+<!-- 12em  vs auto -->
+    <style>
+        .ui-tabs-vertical { width: 55em; }
+        .ui-tabs-vertical .ui-tabs-nav { padding: .2em .1em .2em .2em; float: left; width: auto; }
+        .ui-tabs-vertical .ui-tabs-nav li { clear: left; width: 98%; border-bottom-width: 1px !important; border-right-width: 0 !important; margin: 0 -1px .2em 0; }
+        .ui-tabs-vertical .ui-tabs-nav li a { display:block; }
+        .ui-tabs-vertical .ui-tabs-nav li.ui-tabs-active { padding-bottom: 0; padding-right: .1em; border-right-width: 1px; }
+        .ui-tabs-vertical .ui-tabs-panel { padding: 1em; float: right; width: 30em;}
+    </style>
+
+    <style>
+        html {
+            background: url('images/background4.jpg') no-repeat center center fixed;
+            -webkit-background-size: cover;
+            -moz-background-size: cover;
+            -o-background-size: cover;
+            background-size: cover;
+        }
+    </style>
+    <!-- Favicon
+    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <link rel="icon" type="image/png" href="images/favicon.png">
+
+</head>
+
+<body>
+
+<!-- Primary Page Layout
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+<div class="container">
+    <div class="u-full-width" class="row">
+        <div class="u-full-width" style="margin-top: 10%">
+
+            <div id="tabs">
+                <ul id="sortable">
+                    <li><a href="#tabs-1">Agenda Item 1 this is a really long one</a></li>
+                    <li><a href="#tabs-2">Agenda Item 2</a></li>
+                    <li><a href="#tabs-3">Agenda Item 3</a></li>
+                    <li><a href="#tabs-4">Agenda Item 4</a></li>
+                </ul>
+                <div id="tabs-1">
+                    <h2>Agenda Item 1</h2>
+                    <p><a href="https://www.w3schools.com/html/">Visit our HTML tutorial</a></p>
+                    <p><a href="https://www.w3schools.com/html/">Visit our HTML tutorial</a></p>
+                    <p><a href="https://www.w3schools.com/html/">Visit our HTML tutorial</a></p>
+                </div>
+                <div id="tabs-2">
+                    <h2>Agenda Item 2</h2>
+                    <p><a href="https://www.w3schools.com/html/">Visit our HTML tutorial</a></p>
+                    <p><a href="https://www.w3schools.com/html/">Visit our HTML tutorial</a></p>
+                </div>
+                <div id="tabs-3">
+                    <h2>Agenda Item 3</h2>
+                    <p><a href="https://www.w3schools.com/html/">Visit our HTML tutorial</a></p>
+                    <p><a href="https://www.w3schools.com/html/">Visit our HTML tutorial</a></p>
+                </div>
+                <div id="tabs-4">
+                    <h2>Agenda Item 4</h2>
+                    <p>Mauris eleifend est et turpis. Duis id erat. Suspendisse potenti. Aliquam vulputate, pede vel vehicula accumsan, mi neque rutrum erat, eu congue orci lorem eget lorem. Vestibulum non ante. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Fusce sodales. Quisque eu urna vel enim commodo pellentesque. Praesent eu risus hendrerit ligula tempus pretium. Curabitur lorem enim, pretium nec, feugiat nec, luctus a, lacus.</p>
+                    <p>Duis cursus. Maecenas ligula eros, blandit nec, pharetra at, semper at, magna. Nullam ac lacus. Nulla facilisi. Praesent viverra justo vitae neque. Praesent blandit adipiscing velit. Suspendisse potenti. Donec mattis, pede vel pharetra blandit, magna ligula faucibus eros, id euismod lacus dolor eget odio. Nam scelerisque. Donec non libero sed nulla mattis commodo. Ut sagittis. Donec nisi lectus, feugiat porttitor, tempor ac, tempor vitae, pede. Aenean vehicula velit eu tellus interdum rutrum. Maecenas commodo. Pellentesque nec elit. Fusce in lacus. Vivamus a libero vitae lectus hendrerit hendrerit.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+</body>
+</html>

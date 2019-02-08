@@ -1,0 +1,25 @@
+{
+  "name": "my-echo-app",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node ./bin/www"
+  },
+  "dependencies": {
+    "cookie-parser": "~1.4.3",
+    "debug": "~2.6.9",
+    "express": "~4.16.0",
+    "hbs": "~4.0.1",
+    "http-errors": "~1.6.2",
+    "morgan": "~1.9.0",
+    "request": "^2.87.0",
+    "bluebird": "^3.5.0",
+    "moment": "^2.22.2",
+    "moment-timezone": "^0.5.17",
+    "jquery": "^3.3.1",
+    "@cloudant/cloudant": "^2.3.*",
+    "body-parser": "^1.18.3",
+    "dotenv": "^6.2.0",
+    "jspdf": "^1.5.3"
+  }
+}
