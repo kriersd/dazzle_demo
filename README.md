@@ -25,7 +25,7 @@ can deliver kick butt demos and presenations. You may share the links used in yo
 2. Go to the catalog 
 3. Select Cloudant from the catalog
 4. provision a cloudant service
-5. You can name this anything you want and it's ok to accept all the defaults. The lite plan will work just fine for this app. 
+5. You can name this anything you want and it's ok to accept all the defaults. The **_lite plan_** will work just fine for this app. 
 
 **Once the service is provisioned you will need to configure your database** 
 
