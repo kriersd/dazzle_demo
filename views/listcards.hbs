@@ -133,7 +133,12 @@
                     <td><a href="/showcards?id={{_id}}" target="_blank">{{event}}</a></td>
                     <td>{{owner_name}}</td>
                     <td>{{timestamp}}</td>
+                    <td><a href="/exportcards?id={{_id}}" class="fas fa-file-export" title="Export">  </a>  <a href="/copycards?id={{_id}}" class="fas far fa-copy fa-1x" title="Clone"> </a>  <a href="/editcards?id={{_id}}" class="fas far fa-pencil-alt fa-1x" title="Edit">  </a> <a href="/delcards?id={{_id}}" class="fas far fa-trash-alt fa-1x" title="Delete" onclick=" return confirm('Are you sure you want to delete this item?');"> </a> </td>
+                    <!--
                     <td><a href="/exportcards?id={{_id}}" class="fas fa-file-export" title="Export">  </a>  <a href="/copycards?id={{_id}}" class="fas far fa-copy fa-1x" title="Clone"> </a>  <a href="/editcards?id={{_id}}" class="fas far fa-pencil-alt fa-1x" title="Edit">  </a> <a href="/delcards?id={{_id}}" class="fas far fa-trash-alt fa-1x" title="Delete"></a></td>
+
+                    <a href="url_to_delete" onclick="return confirm('Are you sure you want to delete this item?');">Delete</a>
+                    -->
                 </tr>
                 {{/rows}}
 

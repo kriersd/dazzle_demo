@@ -93,8 +93,8 @@ router.get('/', function(req, res, next) {
             var CurrentDate = moment().format("YYYY-MM-DD-kk-mm-ss");
             console.log("Date TS: " + CurrentDate);
             docToCopy.timestamp = CurrentDate;
-            docToCopy._id = (docToCopy.event + "-" + CurrentDate);
-
+            //docToCopy._id = (docToCopy.event + "-" + CurrentDate);
+            docToCopy._id = ("daz-clone" + "-" + CurrentDate);
             delete docToCopy._rev;  // Remove this..
 
             console.log("NEW DOC: " + JSON.stringify(docToCopy));
