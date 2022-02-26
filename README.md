@@ -62,7 +62,28 @@ can deliver kick butt demos and presenations. You may share the links used in yo
 
 *  click on **create index**
 
-You are now ready to go!!!
+The Database is now ready!! 
+
+###We need to get the connection information for your database. 
+
+1. You wlll find the connection inforation in the **service account** section of your IBM CLoud Service. 
+2. If you do not see a service account, you may need to generate one with role **manager** access. 
+3. Once that is created, you can see the JSON for the credentials. It will look something like this!  You will need this to populate all the sensitive information in the .env file and the docker.env file. 
+
+```
+{
+  "apikey": "xxxxxxxxxxxxxxxxxxxxxxxxx",
+  "host": "xxxxxxxxxxxxxxxxxxx-bluemix.cloudant.com",
+  "iam_apikey_description": "Auto generated apikey during resource-key operation for Instance - crn:v1:bluemix:public:cloudantnosqldb:us-south:a/xxxxxxxxxxxx:xxxxxxxxxxxxxxxxxxc::",
+  "iam_apikey_name": "auto-generated-apikey-xxxx-xxxxx-xxxx-xxxxx-xxxxxx",
+  "iam_role_crn": "crn:v1:bluemix:public:iam::::serviceRole:Manager",
+  "iam_serviceid_crn": "crn:v1:bluemix:public:iam-identity::a/xxxxxxxxxx::serviceid:ServiceId-zzzzzzzzzzzzzzz",
+  "password": "xxxxxxxxxxxxxxxxxxxx",
+  "port": 443,
+  "url": "https://xxxxxxxx-xxxxx:yyyyyyyyyyyyy-bluemix.cloudant.com",
+  "username": "xxxxxxx-yyyyyyy-bluemix"
+}
+```
 
 	
 ## If your running this in DOCKER
@@ -71,9 +92,19 @@ You are now ready to go!!!
 
 1. Clone this repository
 
-2. Create a new file called **docker.env** in the root of the project folder. Look at the EXAMPLE file called: ```RENAME_THIS_TO docker.env EXAMPLE.ONLY``` 
+2. Create a new file called **docker.env** in the root of the project folder. Look at the EXAMPLE file called: ```RENAME_THIS_TO docker.env EXAMPLE.ONLY```  Note: there are no quotes around the values in the docker.env file. 
 3. Add your userid, password, db url, to the file. You will need to first create a CloudantDB in IBM Cloud Public first. 
-4. You will need to pass this into the your container using the --env-file param as such: ```--env-file=./docker.env```
+4. build your container image
+
+   ```
+   docker build -t dazzle-app .
+   ```
+   
+5. You will need to pass this into the your container when you issue the docker run command using the --env-file param as such: ```--env-file=./docker.env```
+
+	```
+	docker run -d -p 3000:3000 --name dazle-app --env-file ./docker.env dazzle-app
+	```
 
 	
 ## If your running this as a NODE.js App 
@@ -89,32 +120,70 @@ You are now ready to go!!!
 ## Deploying to Kubernetes
 
 
-It is assumed that you have a kubernetes environment already up and running. In my specific case, I am deploying this to IBM Cloud Private. 
+It is assumed that you have a kubernetes environment already up and running. In my specific case, I am deploying this to OpenShift. 
 
-1. You must first login and define a Image Pull Policy. To do that you need to log into your ICP admin console. Click on the ```Manage``` menu item. Then select ```Resource Security``` and ```Image Policies```. 
+1. You must first login to IBM CLoud and provision a Registry Service. 
 
-2. Create a new image pull policy with the following settings. 
-	* Name your policy (Can be anything you want)
-	* Scope: namespace
-	* Pick your deployment namespace. 
-	* Add your repo url. Because I hosted my container in docker hub I used this format ```docker.io/<DockerAccount>/* ```
-	* Save your policy. 
-
-	*I used a rather general policy that will allow me to deploy anything from my docker hub account. You may want to be more specific to what you allow. That's up to you.*
+	[IBM Registry Overview](https://cloud.ibm.com/docs/Registry?topic=Registry-registry_overview)
 	
-3. Edit the kubernetes deployment yaml file to map to your repo. I included an EXAMPLE, but you will need to modify it. 
-	* The example yaml file is located in the ```kubernetes_deployment``` folder. 
-	* Modify the namespace (located in two places) 
-	* Modify the image location and tag name (all one line) 
-	* Modify the values for the env prams (db_name, db_full_url, db_userid, db_password, debug) 
+2. Follow the IBM Registry quickstart guide on how to:
+    * Connect to your registry
+    * Create a namespace
+    * Tag your image (locally)
+    * Push your image to the IBM Container Registry 
 
-4. To deploy the application, you will need to issue a kubectl create command like such. 
+[IBM Registry Quick Start Guide](https://cloud.ibm.com/registry/start)
 
-	*Note: You must fully qualify the path to the yaml or be in the current directory to do the deployment.*
+**Note:** I first setup my app to run locally using docker. I then pushed my docker image to the IBM Image Repository. Follow the steps to get the app running in a Docker image locally. 
 
+###Configure the OpenShift YAML files
+
+1.) Modifications needed for the deployment.yaml file. 
+ You will first need to rename this file: 
+ 
+ ```
+ kubernetes_deployment/openshift/deployment EXAMPLE.yaml
+ ```
+Update the environment variables within that file. 
+
+
+	
 ```
-kubectl create -f kubernetes_deployment.yaml
+          env:
+          - name: db_full_url
+            value: https://userid:pasword@account-bluemix.cloudant.com
+          - name: db_name
+            value: mydbname
+          - name: db_url
+            value: account-bluemix.cloudant.com
+          - name: db_user
+            value: userid
+          - name: db_password
+            value: password
+          - name: debug
+            value: false
 ```
+
+2. Deploy the YAML to your OpenShift cluster. 
+
+
+**Note:** The default project within an IBM ROKS cluster is pre-configured to allow access to images that are located in the IBM Registry Services. 
+
+You can use the oc apply command or you can deploy right from the openshift console. Deploy it in this order. 
+
+	1. deployment.yaml
+	2. service.yaml
+	3. route.yaml
+
+
+3. Find your Route URL in the OpenShift Console. 
+
+	Access the site using the route URL plus this path. 
+	
+	```
+	<route url>/listcards
+	```
+
 
 
 

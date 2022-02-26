@@ -1,0 +1,53 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dazzledemo
+  namespace: demo
+spec:
+    selector:
+      matchLabels:
+        app: dazzledemo
+    replicas: 1
+    template:
+      metadata:
+        labels:
+          app: dazzledemo
+      spec:
+        containers:
+        - name: dazzledemo
+          image: dockeraccount/reponame:tag
+          imagePullPolicy: Always
+          ports:
+          - containerPort: 3000
+          env:
+          - name: db_full_url
+            value: https://userid:pasword@account-bluemix.cloudant.com
+          - name: db_name
+            value: mydbname
+          - name: db_url
+            value: account-bluemix.cloudant.com
+          - name: db_user
+            value: userid
+          - name: db_password
+            value: password
+          - name: debug
+            value: false
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: dazzledemo
+  namespace: demo
+  labels:
+    app: dazzledemo
+spec:
+  type: NodePort
+  ports:
+    - port: 3000
+      targetPort: 3000
+      protocol: TCP
+      name: dazzledemo
+  selector:
+    app: dazzledemo
+---

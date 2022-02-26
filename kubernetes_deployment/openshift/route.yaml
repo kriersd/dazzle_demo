@@ -1,0 +1,23 @@
+kind: Route
+apiVersion: route.openshift.io/v1
+metadata:
+  name: dazzle-demo-app
+  namespace: default
+  labels:
+    app: dazzle-demo-app
+    app.kubernetes.io/component: dazzle-demo-app
+    app.kubernetes.io/instance: dazzle-demo-app
+    app.kubernetes.io/name: dazzle-demo-app
+    app.kubernetes.io/part-of: dazzle-demo-app-app
+    app.openshift.io/runtime-version: latest
+spec:
+  to:
+    kind: Service
+    name: dazzle-demo-app
+    weight: 100
+  port:
+    targetPort: 3000
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: Allow
+  wildcardPolicy: None

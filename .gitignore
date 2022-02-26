@@ -1,5 +1,5 @@
 
 kubernetes_deployment/dazzledemo_all_in_one.yaml
+kubernetes_deployment/openshift/deployment.yaml
 .env
 docker.env
-
