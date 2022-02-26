@@ -64,7 +64,7 @@ can deliver kick butt demos and presenations. You may share the links used in yo
 
 The Database is now ready!! 
 
-###We need to get the connection information for your database. 
+### We need to get the connection information for your database. 
 
 1. You wlll find the connection inforation in the **service account** section of your IBM CLoud Service. 
 2. If you do not see a service account, you may need to generate one with role **manager** access. 
@@ -132,20 +132,21 @@ It is assumed that you have a kubernetes environment already up and running. In 
     * Tag your image (locally)
     * Push your image to the IBM Container Registry 
 
-[IBM Registry Quick Start Guide](https://cloud.ibm.com/registry/start)
+	[IBM Registry Quick Start Guide](https://cloud.ibm.com/registry/start)
 
-**Note:** I first setup my app to run locally using docker. I then pushed my docker image to the IBM Image Repository. Follow the steps to get the app running in a Docker image locally. 
+	**Note:** I first setup my app to run locally using docker. I then pushed my docker image to the IBM Image Repository. Follow the steps to get the app running in a Docker image locally. 
 
-###Configure the OpenShift YAML files
+### Configure the OpenShift YAML files
 
 1.) Modifications needed for the deployment.yaml file. 
  You will first need to rename this file: 
  
- ```
- kubernetes_deployment/openshift/deployment EXAMPLE.yaml
- ```
+```
+	 kubernetes_deployment/openshift/deployment EXAMPLE.yaml
+```
+	
+	 
 Update the environment variables within that file. 
-
 
 	
 ```
@@ -167,9 +168,9 @@ Update the environment variables within that file.
 2. Deploy the YAML to your OpenShift cluster. 
 
 
-**Note:** The default project within an IBM ROKS cluster is pre-configured to allow access to images that are located in the IBM Registry Services. 
+	**Note:** The default project within an IBM ROKS cluster is pre-configured to allow access to images that are located in the IBM Registry Services. 
 
-You can use the oc apply command or you can deploy right from the openshift console. Deploy it in this order. 
+	You can use the oc apply command or you can deploy right from the openshift console. Deploy it in this order. 
 
 	1. deployment.yaml
 	2. service.yaml
