@@ -31,22 +31,22 @@ spec:
     spec:
       containers:
         - name: dazzle-demo-app
-          image: <repo-tag>/<image>:latest
+          image: davekrier/dazzledemo:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 3000
               protocol: TCP
           env:
             - name: db_full_url
-              value: https://a3283<EXAMPLE>-4fee<EXAMPLE>0b1<EXAMPLE>-bluemix:ec315<EXAMPLE>c7d<EXAMPLE>86@a3283e3d-ad<EXAMPLE>ec03-bluemix.cloudant.com
+              value: https://a3283e3d-ad02-4fee-bbd9-13b620b1ec03-bluemix:ec3150cdcc9932ab891fd976380aac7dbef1b283eb45789494e07ece9d76fb86@a3283e3d-ad02-4fee-bbd9-13b620b1ec03-bluemix.cloudant.com
             - name: db_url
-              value: a3283e3d-<EXAMPLE>-bluemix.cloudant.com
+              value: a3283e3d-ad02-4fee-bbd9-13b620b1ec03-bluemix.cloudant.com
             - name: db_name
               value: dazzledb
             - name: db_userid
-              value: a328<EXAMPLE>d9-13b<EXAMPLE>c03-bluemix
+              value: a3283e3d-ad02-4fee-bbd9-13b620b1ec03-bluemix
             - name: db_password
-              value: ec<EXAMPLE>fd9763<EXAMPLE>f1<EXAMPLE>78949<EXAMPLE>76fb86
+              value: ec3150cdcc9932ab891fd976380aac7dbef1b283eb45789494e07ece9d76fb86
             - name: debug
               value: 'false'
 ---

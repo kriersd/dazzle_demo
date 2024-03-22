@@ -4,7 +4,7 @@
 
 
 This tool will allow you to build really neat Web Demo / Presentation sites so you
-can deliver kick butt demos and presenations. You may share the links used in your presentation via the link to your demo or you can download a PDF file with all the links and attach it to an email. 
+can deliver kick butt demos and presenations. You may share the links used in your presentation via the **link** to your demo or you can download a PDF file with all the links and attach it to an email. 
 
 ![alt text](https://github.com/kriersd/dazzle_demo/blob/master/public/images/markup_images/dazzle_show.png?raw=true)
 
@@ -28,6 +28,7 @@ can deliver kick butt demos and presenations. You may share the links used in yo
 5. You can name this anything you want and it's ok to accept all the defaults. The **_lite plan_** will work just fine for this app. 
 
 **Once the service is provisioned you will need to configure your database** 
+
 
 ## Configure the new Database
 

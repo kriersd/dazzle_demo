@@ -3,6 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="5754577d-41ac-4fe9-8829-56647d2ecd2f" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -64,6 +65,17 @@
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/.gitignore" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/.env" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/views/listcards.hbs" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Dockerfile" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/views/index.hbs" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/package.json" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/app.js" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/docker.env" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/kubernetes_deployment/dazzledemo_all_in_one  EXAMPLE .yaml" root0="FORCE_HIGHLIGHTING" />
+  </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
@@ -84,7 +96,7 @@
     <property name="nodejs_interpreter_path" value="node" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="/usr/local/bin/node" />
     <property name="nodejs_package_manager_path" value="npm" />
-    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
+    <property name="settings.editor.selected.configurable" value="web-ide.project.structure" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
   <component name="RecentsManager">
@@ -102,7 +114,7 @@
       <recent name="$PROJECT_DIR$/public/images" />
     </key>
   </component>
-  <component name="RunManager" selected="Docker.Docker Dazzle Demo">
+  <component name="RunManager" selected="Node.js.bin/www">
     <configuration name="Docker Dazzle Demo" type="docker-deploy" factoryName="dockerfile" singleton="true" server-name="Docker">
       <deployment type="dockerfile">
         <settings>
@@ -217,6 +229,14 @@
       <workItem from="1602786416221" duration="385000" />
       <workItem from="1602787337283" duration="198000" />
       <workItem from="1645818868266" duration="303000" />
+      <workItem from="1656542228509" duration="41000" />
+      <workItem from="1656627393697" duration="4536000" />
+      <workItem from="1656697581809" duration="4239000" />
+      <workItem from="1657151785270" duration="11000" />
+      <workItem from="1657151930875" duration="186000" />
+      <workItem from="1657152379100" duration="706000" />
+      <workItem from="1657153570149" duration="5000" />
+      <workItem from="1657153884306" duration="5185000" />
     </task>
     <task id="LOCAL-00001" summary="Initial committ.">
       <created>1526234142064</created>
@@ -259,10 +279,8 @@
     <MESSAGE value="Commit 2" />
     <option name="LAST_COMMIT_MESSAGE" value="Commit 2" />
   </component>
-  <component name="WindowStateProjectService">
-    <state x="383" y="153" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1578963989750">
-      <screen x="0" y="23" width="1680" height="976" />
-    </state>
-    <state x="383" y="153" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.23.1680.976@0.23.1680.976" timestamp="1578963989750" />
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
   </component>
 </project>
